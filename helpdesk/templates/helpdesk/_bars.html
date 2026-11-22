@@ -1,0 +1,11 @@
+<section class="panel">
+  <h2>{{ title }}</h2>
+  <ul class="bars">
+    {% for row in rows %}
+      <li>
+        <div class="bar-label"><span>{{ row.label }}</span><strong>{{ row.total }}</strong></div>
+        <div class="bar-track"><span style="width: {{ row.percent }}%"></span></div>
+      </li>
+    {% endfor %}
+  </ul>
+</section>

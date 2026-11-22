@@ -1,0 +1,34 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}Help-Desk Hub{% endblock %}
+{% block crumb %}Overview{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <p class="eyebrow">Ticket management</p>
+    <h1>Report a problem. Track it until it is resolved.</h1>
+    <p class="lede">Help-Desk Hub is where customers open technical tickets and technicians prioritize, assign, and close them.</p>
+    <div class="hero-actions">
+      <a class="button" href="{% url 'register' %}">Create an account</a>
+      <a class="button button-quiet" href="{% url 'login' %}">Log in</a>
+    </div>
+  </section>
+  <section class="role-grid">
+    <article class="panel">
+      <h2>Help Desk Customer</h2>
+      <ul>
+        <li>Open a ticket for hardware, software, network, access, or printer issues.</li>
+        <li>See the status of every ticket you requested.</li>
+        <li>Comment back and forth with the technician assigned to you.</li>
+      </ul>
+    </article>
+    <article class="panel">
+      <h2>Technician</h2>
+      <ul>
+        <li>See the full ticket queue.</li>
+        <li>Assign work, change priority, and move status from open to closed.</li>
+        <li>Read simple KPI reports for the queue.</li>
+      </ul>
+    </article>
+  </section>
+{% endblock %}

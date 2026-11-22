@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'helpdesk.apps.HelpdeskConfig',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,9 @@ WSGI_APPLICATION = 'cs557.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
+#
+# Local SQL file so the five proposal tables can be created and used.
+# A MySQL server is not connected.
 
 DATABASES = {
     'default': {
@@ -78,6 +82,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTH_USER_MODEL = 'helpdesk.User'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'home'
 
 
 # Password validation

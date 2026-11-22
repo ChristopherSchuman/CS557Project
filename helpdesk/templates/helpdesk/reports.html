@@ -1,0 +1,48 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}Reports · Help-Desk Hub{% endblock %}
+{% block crumb %}Reports{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>Reports</h1>
+      <p class="lede">Simple KPIs for the technician queue.</p>
+    </div>
+  </div>
+
+  <section class="stat-row">
+    <article class="stat"><span>Total</span><strong>{{ kpis.total }}</strong></article>
+    <article class="stat"><span>Open</span><strong>{{ kpis.open }}</strong></article>
+    <article class="stat"><span>In progress</span><strong>{{ kpis.in_progress }}</strong></article>
+    <article class="stat"><span>Resolved</span><strong>{{ kpis.resolved }}</strong></article>
+    <article class="stat"><span>Closed</span><strong>{{ kpis.closed }}</strong></article>
+    <article class="stat"><span>Unassigned</span><strong>{{ kpis.unassigned }}</strong></article>
+  </section>
+
+  <p class="lede">
+    {% if kpis.average_hours is not None %}
+      Average time to resolve: {{ kpis.average_hours }} hours.
+    {% else %}
+      Average time to resolve appears after a ticket has resolved_at set.
+    {% endif %}
+  </p>
+
+  <div class="report-grid">
+    {% include "helpdesk/_bars.html" with title="By status" rows=kpis.status_rows %}
+    {% include "helpdesk/_bars.html" with title="By priority" rows=kpis.priority_rows %}
+    {% include "helpdesk/_bars.html" with title="By category" rows=kpis.category_rows %}
+    <section class="panel">
+      <h2>By technician</h2>
+      {% if kpis.technician_rows %}
+        <ul class="count-list">
+          {% for row in kpis.technician_rows %}
+            <li><span>{{ row.label }}</span><strong>{{ row.total }}</strong></li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty">No technicians yet.</p>
+      {% endif %}
+    </section>
+  </div>
+{% endblock %}

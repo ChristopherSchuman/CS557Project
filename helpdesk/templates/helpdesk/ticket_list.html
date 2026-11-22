@@ -1,0 +1,95 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}Tickets · Help-Desk Hub{% endblock %}
+{% block crumb %}Tickets{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>{% if user.is_technician %}All tickets{% else %}Tickets you opened{% endif %}</h1>
+      <p class="lede">Filter by title, status, priority, or category.</p>
+    </div>
+    <a class="button" href="{% url 'ticket_create' %}">New ticket</a>
+  </div>
+
+  <form class="filters" method="get">
+    <label>
+      <span>Search</span>
+      <input type="search" name="q" value="{{ query }}" placeholder="Title or description">
+    </label>
+    <label>
+      <span>Status</span>
+      <select name="status">
+        <option value="">Any</option>
+        {% for value, label in status_choices %}
+          <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      <span>Priority</span>
+      <select name="priority">
+        <option value="">Any</option>
+        {% for value, label in priority_choices %}
+          <option value="{{ value }}" {% if priority == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      <span>Category</span>
+      <select name="category">
+        <option value="">Any</option>
+        {% for item in categories %}
+          <option value="{{ item.id }}" {% if category == item.id|stringformat:"s" %}selected{% endif %}>{{ item.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button class="button" type="submit">Apply</button>
+  </form>
+
+  {% if page.object_list %}
+    <div class="table-wrap">
+      <table class="ticket-table">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>Title</th>
+            <th class="hide-sm">Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            {% if user.is_technician %}<th class="hide-sm">Requester</th>{% endif %}
+            <th class="hide-sm">Assigned technician</th>
+            <th class="hide-sm">Created_at</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ticket in page %}
+            <tr class="priority-row priority-{{ ticket.priority_class }}">
+              <td><a href="{{ ticket.get_absolute_url }}">{{ ticket.reference }}</a></td>
+              <td><a href="{{ ticket.get_absolute_url }}">{{ ticket.title }}</a></td>
+              <td class="hide-sm">{{ ticket.category.name }}</td>
+              <td><span class="pill priority-{{ ticket.priority_class }}">{{ ticket.priority }}</span></td>
+              <td><span class="pill status-{{ ticket.status_class }}">{{ ticket.status }}</span></td>
+              {% if user.is_technician %}<td class="hide-sm">{{ ticket.requester.username }}</td>{% endif %}
+              <td class="hide-sm">{{ ticket.assigned_technician.username|default:"Unassigned" }}</td>
+              <td class="hide-sm">{{ ticket.created_at|date:"M j, Y, g:i a" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page.paginator.num_pages > 1 %}
+      <nav class="pager">
+        {% if page.has_previous %}
+          <a href="?page={{ page.previous_page_number }}&q={{ query }}&status={{ status }}&priority={{ priority }}&category={{ category }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+        {% if page.has_next %}
+          <a href="?page={{ page.next_page_number }}&q={{ query }}&status={{ status }}&priority={{ priority }}&category={{ category }}">Next</a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  {% else %}
+    <p class="empty">No tickets match this view.</p>
+  {% endif %}
+{% endblock %}

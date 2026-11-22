@@ -1,0 +1,49 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}Dashboard · Help-Desk Hub{% endblock %}
+{% block crumb %}Dashboard{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>{% if user.is_technician %}Queue{% else %}Your tickets{% endif %}</h1>
+      <p class="lede">Signed in as {{ user.username }}, {{ user.role }}.</p>
+    </div>
+    <a class="button" href="{% url 'ticket_create' %}">New ticket</a>
+  </div>
+
+  <section class="stat-row">
+    {% if user.is_technician %}
+      <article class="stat"><span>Open</span><strong>{{ kpis.open }}</strong></article>
+      <article class="stat"><span>In progress</span><strong>{{ kpis.in_progress }}</strong></article>
+      <article class="stat"><span>Unassigned</span><strong>{{ kpis.unassigned }}</strong></article>
+      <article class="stat"><span>All tickets</span><strong>{{ kpis.total }}</strong></article>
+    {% else %}
+      <article class="stat"><span>Open</span><strong>{{ open_count }}</strong></article>
+      <article class="stat"><span>In progress</span><strong>{{ in_progress_count }}</strong></article>
+      <article class="stat"><span>Yours</span><strong>{{ mine_count }}</strong></article>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Recent tickets</h2>
+      <a href="{% url 'ticket_list' %}">View all</a>
+    </div>
+    {% if recent_tickets %}
+      <ul class="ticket-brief">
+        {% for ticket in recent_tickets %}
+          <li>
+            <a href="{{ ticket.get_absolute_url }}">
+              <span class="ref">{{ ticket.reference }}</span>
+              <span class="brief-title">{{ ticket.title }}</span>
+              <span class="pill status-{{ ticket.status_class }}">{{ ticket.status }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="empty">No tickets yet. Open the first one.</p>
+    {% endif %}
+  </section>
+{% endblock %}

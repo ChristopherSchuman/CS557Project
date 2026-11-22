@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Help-Desk Hub{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'helpdesk/helpdesk.css' %}">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" data-sidebar>
+      <a class="brand" href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}">
+        <span class="brand-mark">HD</span>
+        <span>
+          <strong>Help-Desk Hub</strong>
+          <small>Group 5</small>
+        </span>
+      </a>
+      <nav class="side-nav">
+        {% if user.is_authenticated %}
+          <a class="{% if request.resolver_match.url_name == 'dashboard' %}is-active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+          <a class="{% if request.resolver_match.url_name == 'ticket_list' or request.resolver_match.url_name == 'ticket_detail' %}is-active{% endif %}" href="{% url 'ticket_list' %}">Tickets</a>
+          <a class="{% if request.resolver_match.url_name == 'ticket_create' %}is-active{% endif %}" href="{% url 'ticket_create' %}">New ticket</a>
+          <a class="{% if request.resolver_match.url_name == 'category_list' %}is-active{% endif %}" href="{% url 'category_list' %}">Categories</a>
+          {% if user.is_technician %}
+            <a class="{% if request.resolver_match.url_name == 'reports' %}is-active{% endif %}" href="{% url 'reports' %}">Reports</a>
+          {% endif %}
+        {% else %}
+          <a class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}" href="{% url 'home' %}">Overview</a>
+          <a class="{% if request.resolver_match.url_name == 'login' %}is-active{% endif %}" href="{% url 'login' %}">Log in</a>
+          <a class="{% if request.resolver_match.url_name == 'register' %}is-active{% endif %}" href="{% url 'register' %}">Register</a>
+        {% endif %}
+      </nav>
+      {% if user.is_authenticated %}
+        <div class="side-user">
+          <p>{{ user.username }}</p>
+          <span class="role">{{ user.role }}</span>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="text-button">Log out</button>
+          </form>
+        </div>
+      {% endif %}
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <button type="button" class="nav-toggle" data-nav-toggle aria-label="Open menu">Menu</button>
+        <p class="crumb">{% block crumb %}Help-Desk Hub{% endblock %}</p>
+      </header>
+      <main>
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="message {{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+  <script src="{% static 'helpdesk/helpdesk.js' %}"></script>
+</body>
+</html>

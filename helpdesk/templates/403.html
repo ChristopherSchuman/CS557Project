@@ -1,0 +1,12 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}Not allowed · Help-Desk Hub{% endblock %}
+{% block crumb %}Not allowed{% endblock %}
+
+{% block content %}
+  <section class="narrow">
+    <h1>That page is limited to technicians.</h1>
+    <p class="lede">Help Desk Customer accounts can open tickets and follow the ones they requested.</p>
+    <a class="button" href="{% url 'dashboard' %}">Back to the dashboard</a>
+  </section>
+{% endblock %}

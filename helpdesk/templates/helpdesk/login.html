@@ -1,0 +1,22 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}Log in · Help-Desk Hub{% endblock %}
+{% block crumb %}Log in{% endblock %}
+
+{% block content %}
+  <section class="narrow">
+    <h1>Log in</h1>
+    <p class="lede">Use a Technician or Help Desk Customer account.</p>
+    <form class="stack-form" method="post">
+      {% csrf_token %}
+      {% include "helpdesk/_fields.html" %}
+      <button class="button" type="submit">Log in</button>
+    </form>
+    <p class="form-foot">No account yet? <a href="{% url 'register' %}">Register</a></p>
+    <aside class="demo-note">
+      <p><strong>Demo logins</strong> after <code>python manage.py seed_helpdesk</code></p>
+      <p>Technician: <code>technician1</code> / <code>HelpDesk!tech</code></p>
+      <p>Customer: <code>customer1</code> / <code>HelpDesk!user</code></p>
+    </aside>
+  </section>
+{% endblock %}

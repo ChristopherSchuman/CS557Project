@@ -1,0 +1,16 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}New ticket · Help-Desk Hub{% endblock %}
+{% block crumb %}New ticket{% endblock %}
+
+{% block content %}
+  <section class="narrow">
+    <h1>Open a ticket</h1>
+    <p class="lede">You will be stored as Requester_id. Status starts at Open.</p>
+    <form class="stack-form" method="post">
+      {% csrf_token %}
+      {% include "helpdesk/_fields.html" %}
+      <button class="button" type="submit">Submit ticket</button>
+    </form>
+  </section>
+{% endblock %}

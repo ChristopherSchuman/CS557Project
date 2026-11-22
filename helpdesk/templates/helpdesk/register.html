@@ -1,0 +1,17 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}Register · Help-Desk Hub{% endblock %}
+{% block crumb %}Register{% endblock %}
+
+{% block content %}
+  <section class="narrow">
+    <h1>Create an account</h1>
+    <p class="lede">Choose the role that matches how you will use Help-Desk Hub.</p>
+    <form class="stack-form" method="post">
+      {% csrf_token %}
+      {% include "helpdesk/_fields.html" %}
+      <button class="button" type="submit">Register</button>
+    </form>
+    <p class="form-foot">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+  </section>
+{% endblock %}

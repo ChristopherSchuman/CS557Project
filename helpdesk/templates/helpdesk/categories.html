@@ -1,0 +1,24 @@
+{% extends "helpdesk/base.html" %}
+
+{% block title %}Categories · Help-Desk Hub{% endblock %}
+{% block crumb %}Categories{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>Categories</h1>
+      <p class="lede">Hardware, Software, Network, Account_Access, Printer, and Other.</p>
+    </div>
+  </div>
+  <div class="category-grid">
+    {% for category in categories %}
+      <article class="panel">
+        <h2>{{ category.name }}</h2>
+        <p>{{ category.description }}</p>
+        <p class="count">{{ category.ticket_count }} ticket{{ category.ticket_count|pluralize }}</p>
+      </article>
+    {% empty %}
+      <p class="empty">No categories have been created.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
